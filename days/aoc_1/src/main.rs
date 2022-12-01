@@ -38,9 +38,7 @@ fn two(input: &Vec<String>) {
     });
     calories.sort();
 
-    let max_three: usize = calories[calories.len() - 3..calories.len()]
-        .into_iter()
-        .sum();
+    let max_three: usize = calories.into_iter().rev().take(3).sum();
 
     println!("Two: {max_three:?}");
 }
