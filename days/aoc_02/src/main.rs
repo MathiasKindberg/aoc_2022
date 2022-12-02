@@ -42,7 +42,7 @@ fn input() -> Vec<(String, String)> {
         .collect()
 }
 
-fn do_dock_paper_scissors(opponent: &Hand, you: &Hand) -> usize {
+fn do_rock_paper_scissors(opponent: &Hand, you: &Hand) -> usize {
     let match_result = match (&you, &opponent) {
         (Hand::Rock, Hand::Rock)
         | (Hand::Paper, Hand::Paper)
@@ -62,7 +62,7 @@ fn one(input: &[(String, String)]) {
     let score: usize = input
         .iter()
         .map(|(opponent, you)| (Hand::from(opponent.as_str()), Hand::from(you.as_str())))
-        .map(|(opponent, you)| do_dock_paper_scissors(&opponent, &you))
+        .map(|(opponent, you)| do_rock_paper_scissors(&opponent, &you))
         .sum();
     println!("One: {score}");
 }
@@ -112,7 +112,7 @@ fn two(input: &[(String, String)]) {
             let your_hand = choose_your_hand(&opponent, you);
             (opponent, your_hand)
         })
-        .map(|(opponent, you)| do_dock_paper_scissors(&opponent, &you))
+        .map(|(opponent, you)| do_rock_paper_scissors(&opponent, &you))
         .sum();
     println!("Two: {score:#?}");
 }
