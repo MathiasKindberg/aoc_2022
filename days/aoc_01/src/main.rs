@@ -10,7 +10,7 @@ fn input() -> Vec<String> {
         .collect()
 }
 
-fn one(input: &Vec<String>) {
+fn one(input: &[String]) {
     let max: usize = input
         .iter()
         .fold(vec![0], |mut acc, line| {
@@ -27,7 +27,7 @@ fn one(input: &Vec<String>) {
     println!("One: {max}");
 }
 
-fn two(input: &Vec<String>) {
+fn two(input: &[String]) {
     let mut calories: Vec<usize> = input.iter().fold(vec![0], |mut acc, line| {
         if line.is_empty() {
             acc.push(0);

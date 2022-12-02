@@ -58,7 +58,7 @@ fn do_dock_paper_scissors(opponent: &Hand, you: &Hand) -> usize {
     match_result + you.extra_score()
 }
 
-fn one(input: &Vec<(String, String)>) {
+fn one(input: &[(String, String)]) {
     let score: usize = input
         .iter()
         .map(|(opponent, you)| (Hand::from(opponent.as_str()), Hand::from(you.as_str())))
@@ -99,7 +99,7 @@ fn choose_your_hand(opponent: &Hand, desired_outcome: MatchResult) -> Hand {
     }
 }
 
-fn two(input: &Vec<(String, String)>) {
+fn two(input: &[(String, String)]) {
     let score: usize = input
         .iter()
         .map(|(opponent, you)| {
