@@ -1,5 +1,5 @@
 [package]
-name = "aoc_1"
+name = "aoc_01"
 version = "0.0.0"
 edition = "2021"
 
