@@ -60,7 +60,7 @@ fn do_dock_paper_scissors(opponent: &Hand, you: &Hand) -> usize {
 
 fn one(input: &Vec<(String, String)>) {
     let score: usize = input
-        .into_iter()
+        .iter()
         .map(|(opponent, you)| (Hand::from(opponent.as_str()), Hand::from(you.as_str())))
         .map(|(opponent, you)| do_dock_paper_scissors(&opponent, &you))
         .sum();
