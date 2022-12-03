@@ -84,7 +84,6 @@ fn two(input: &[String]) {
 
 fn main() {
     let input = input();
-    // println!("input: {input:#?}");
     one(&input);
     two(&input);
 }
