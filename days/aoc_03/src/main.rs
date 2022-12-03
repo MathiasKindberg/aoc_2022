@@ -21,7 +21,7 @@ fn priority(char: char) -> u32 {
     }
 }
 
-fn score_backpack(first: &String, second: &String) -> u32 {
+fn score_backpack(first: &str, second: &str) -> u32 {
     let first: std::collections::HashSet<char> = first.chars().collect();
 
     let matching_item = second.chars().into_iter().try_for_each(|char| {
@@ -37,21 +37,20 @@ fn score_backpack(first: &String, second: &String) -> u32 {
     }
 }
 
-fn one(input: &[String]) {
-    let score: u32 = input
-        .into_iter()
+fn one(input: &[String]) -> u32 {
+    input
+        .iter()
         .map(|line| {
             let (first, second) = line.split_at(line.len() / 2);
             assert_eq!(first.len(), second.len());
             (first.to_string(), second.to_string())
         })
         .map(|(first, second)| score_backpack(&first, &second))
-        .sum();
-    println!("One: {score}");
+        .sum()
 }
 
 fn score_badge(input: &[String]) -> u32 {
-    let badge = input.into_iter().try_fold(
+    let badge = input.iter().try_fold(
         std::collections::HashMap::<char, usize>::new(),
         |mut acc, backpack| {
             let mut backpack: Vec<char> = backpack.chars().collect();
@@ -77,15 +76,17 @@ fn score_badge(input: &[String]) -> u32 {
     }
 }
 
-fn two(input: &[String]) {
-    let score: u32 = input.chunks(3).map(|chunk| score_badge(chunk)).sum();
-    println!("Two: {score}");
+fn two(input: &[String]) -> u32 {
+    input.chunks(3).map(score_badge).sum()
 }
 
 fn main() {
     let input = input();
-    one(&input);
-    two(&input);
+    let one = one(&input);
+    let two = two(&input);
+
+    println!("one: {one}");
+    println!("two: {two}");
 }
 
 #[cfg(test)]
