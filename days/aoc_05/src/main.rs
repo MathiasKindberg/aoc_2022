@@ -114,11 +114,8 @@ fn one(mut stacks: Vec<Vec<String>>, moves: &[Move]) -> String {
 fn two(mut stacks: Vec<Vec<String>>, moves: &[Move]) -> String {
     for Move { num, from, to } in moves {
         let length = stacks[*from].len();
-
         let to_move = stacks[*from].split_off(length - num);
-
         assert_eq!(to_move.len(), *num, "Must move equal number");
-
         stacks[*to].extend(to_move.into_iter());
     }
 
