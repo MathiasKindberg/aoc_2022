@@ -49,8 +49,7 @@ fn process_input(mut layout: Vec<String>, moves: Vec<String>) -> (Vec<Vec<String
     let stacks: Vec<Vec<String>> = layout
         .into_iter()
         .map(|row| {
-            let res: Vec<String> = row
-                .chars()
+            row.chars()
                 .collect::<Vec<char>>()
                 .chunks(4)
                 .map(|chunk| {
@@ -62,8 +61,7 @@ fn process_input(mut layout: Vec<String>, moves: Vec<String>) -> (Vec<Vec<String
                         .trim_matches(']')
                         .to_owned()
                 })
-                .collect();
-            res
+                .collect()
         })
         .collect();
 
