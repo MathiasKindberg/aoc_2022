@@ -20,6 +20,8 @@ fn input() -> (Vec<String>, Vec<String>) {
     (layout, moves)
 }
 
+// Clone free transpose 💥
+// https://stackoverflow.com/questions/64498617/how-to-transpose-a-vector-of-vectors-in-rust
 fn transpose<T>(v: Vec<Vec<T>>) -> Vec<Vec<T>> {
     assert!(!v.is_empty());
     let len = v[0].len();
@@ -40,8 +42,9 @@ fn process_input(mut layout: Vec<String>, moves: Vec<String>) -> (Vec<Vec<String
     let stacks: Vec<Vec<String>> = layout
         .into_iter()
         .map(|row| {
-            let chunked: Vec<char> = row.chars().collect();
-            let res: Vec<String> = chunked
+            let res: Vec<String> = row
+                .chars()
+                .collect::<Vec<char>>()
                 .chunks(4)
                 .map(|chunk| {
                     chunk
@@ -76,11 +79,11 @@ fn process_input(mut layout: Vec<String>, moves: Vec<String>) -> (Vec<Vec<String
                 .map(|split| split.parse::<usize>().unwrap())
                 .collect()
         })
-        .map(|to_move: Vec<usize>| Move {
-            num: to_move[0],
+        .map(|movement: Vec<usize>| Move {
+            num: movement[0],
             // Make it zer0 indexed.
-            from: to_move[1] - 1,
-            to: to_move[2] - 1,
+            from: movement[1] - 1,
+            to: movement[2] - 1,
         })
         .collect();
 
@@ -110,10 +113,13 @@ fn one(mut stacks: Vec<Vec<String>>, moves: &[Move]) -> String {
 
 fn two(mut stacks: Vec<Vec<String>>, moves: &[Move]) -> String {
     for Move { num, from, to } in moves {
-        for _ in 0..*num {
-            let item = stacks[*from].pop().unwrap();
-            stacks[*to].push(item);
-        }
+        let length = stacks[*from].len();
+
+        let to_move = stacks[*from].split_off(length - num);
+
+        assert_eq!(to_move.len(), *num, "Must move equal number");
+
+        stacks[*to].extend(to_move.into_iter());
     }
 
     stacks
