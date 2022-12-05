@@ -99,7 +99,7 @@ fn choose_your_hand(opponent: &Hand, desired_outcome: MatchResult) -> Hand {
     }
 }
 
-fn two(input: &Vec<(String, String)>) {
+fn two(input: &[(String, String)]) {
     let score: usize = input
         .iter()
         .map(|(opponent, you)| {
