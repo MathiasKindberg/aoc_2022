@@ -43,7 +43,7 @@ fn transpose<T>(v: Vec<Vec<T>>) -> Vec<Vec<T>> {
         .collect()
 }
 
-fn process_input(mut layout: Vec<String>, moves: Vec<String>) -> (Vec<Vec<String>>, Vec<Move>) {
+fn process_layout(mut layout: Vec<String>) -> Vec<Vec<String>> {
     let _bays = layout.pop().unwrap();
 
     let stacks: Vec<Vec<String>> = layout
@@ -65,7 +65,7 @@ fn process_input(mut layout: Vec<String>, moves: Vec<String>) -> (Vec<Vec<String
         })
         .collect();
 
-    let stacks: Vec<Vec<String>> = transpose(stacks)
+    transpose(stacks)
         .into_iter()
         .map(|bay| {
             bay.into_iter()
@@ -73,9 +73,11 @@ fn process_input(mut layout: Vec<String>, moves: Vec<String>) -> (Vec<Vec<String
                 .rev()
                 .collect()
         })
-        .collect();
+        .collect()
+}
 
-    let moves: Vec<Move> = moves
+fn process_moves(moves: Vec<String>) -> Vec<Move> {
+    moves
         .into_iter()
         .map(|row| {
             row.matches(|c: char| c.is_numeric() || c.is_whitespace())
@@ -90,9 +92,7 @@ fn process_input(mut layout: Vec<String>, moves: Vec<String>) -> (Vec<Vec<String
             from: movement[1] - 1,
             to: movement[2] - 1,
         })
-        .collect();
-
-    (stacks, moves)
+        .collect()
 }
 
 fn one(mut stacks: Vec<Vec<String>>, moves: &[Move]) -> String {
@@ -125,7 +125,10 @@ fn two(mut stacks: Vec<Vec<String>>, moves: &[Move]) -> String {
 
 fn main() {
     let (layout, moves) = input();
-    let (stacks, moves) = process_input(layout, moves);
+
+    let stacks = process_layout(layout);
+    let moves = process_moves(moves);
+
     let one = one(stacks.clone(), &moves);
     let two = two(stacks, &moves);
 
