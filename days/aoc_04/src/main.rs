@@ -36,7 +36,7 @@ fn one(input: &[String]) -> u32 {
         .iter()
         .map(|line| line.split_once(',').unwrap())
         .map(|(first, second)| (CleaningRange::new(first), CleaningRange::new(second)))
-        .map(|(first, second)| overlap(first, second) as u32)
+        .map(|(first, second)| u32::from(overlap(first, second)))
         .sum()
 }
 
@@ -50,7 +50,7 @@ fn two(input: &[String]) -> u32 {
         .iter()
         .map(|line| line.split_once(',').unwrap())
         .map(|(first, second)| (CleaningRange::new(first), CleaningRange::new(second)))
-        .map(|(first, second)| any_overlap(first, second) as u32)
+        .map(|(first, second)| u32::from(any_overlap(first, second)))
         .sum()
 }
 
