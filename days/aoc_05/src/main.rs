@@ -20,6 +20,13 @@ fn input() -> (Vec<String>, Vec<String>) {
     (layout, moves)
 }
 
+#[derive(Debug)]
+struct Move {
+    num: usize,
+    from: usize,
+    to: usize,
+}
+
 // Clone free transpose 💥
 // https://stackoverflow.com/questions/64498617/how-to-transpose-a-vector-of-vectors-in-rust
 fn transpose<T>(v: Vec<Vec<T>>) -> Vec<Vec<T>> {
@@ -88,13 +95,6 @@ fn process_input(mut layout: Vec<String>, moves: Vec<String>) -> (Vec<Vec<String
         .collect();
 
     (stacks, moves)
-}
-
-#[derive(Debug)]
-struct Move {
-    num: usize,
-    from: usize,
-    to: usize,
 }
 
 fn one(mut stacks: Vec<Vec<String>>, moves: &[Move]) -> String {
