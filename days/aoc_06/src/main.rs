@@ -12,11 +12,11 @@ fn input() -> Vec<String> {
         .collect()
 }
 
-fn find_first_unqiue_window(input: &str, distinct_characters: usize) -> usize {
+fn find_first_unqiue_window(input: &str, size: usize) -> usize {
     let char_indices = input.char_indices().collect::<Vec<(usize, char)>>();
 
     let resut = char_indices
-        .windows(distinct_characters)
+        .windows(size)
         .map(|window| {
             window.iter().fold(
                 (Vec::new(), Vec::new()),
@@ -31,7 +31,7 @@ fn find_first_unqiue_window(input: &str, distinct_characters: usize) -> usize {
             chars.sort();
             chars.dedup();
 
-            if indices.len() == distinct_characters && chars.len() == distinct_characters {
+            if indices.len() == size && chars.len() == size {
                 // AoC wants 1 based indexing
                 return ControlFlow::Break(*indices.last().unwrap() + 1);
             }
@@ -51,6 +51,7 @@ fn main() {
         .iter()
         .map(|input| find_first_unqiue_window(input, 4))
         .collect();
+
     let two: Vec<usize> = input
         .iter()
         .map(|input| find_first_unqiue_window(input, 14))
@@ -59,5 +60,3 @@ fn main() {
     println!("one: \n{one:#?}");
     println!("two: \n{two:#?}");
 }
-
-// zcfzfwzzqfrljwzlrfnpqdbhtmscgvjw
