@@ -15,7 +15,7 @@ fn input() -> Vec<String> {
 fn find_first_unqiue_window(input: &str, size: usize) -> usize {
     let char_indices = input.char_indices().collect::<Vec<(usize, char)>>();
 
-    let resut = char_indices
+    let result = char_indices
         .windows(size)
         .map(|window| {
             window.iter().fold(
@@ -38,7 +38,7 @@ fn find_first_unqiue_window(input: &str, size: usize) -> usize {
             std::ops::ControlFlow::Continue(())
         });
 
-    match resut {
+    match result {
         ControlFlow::Break(res) => res,
         ControlFlow::Continue(_) => unreachable!("We found no match....."),
     }
