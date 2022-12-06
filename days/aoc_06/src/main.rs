@@ -19,7 +19,7 @@ fn find_first_unqiue_window(input: &str, size: usize) -> usize {
         .windows(size)
         .map(|window| {
             window.iter().fold(
-                (Vec::new(), Vec::new()),
+                (Vec::with_capacity(size), Vec::with_capacity(size)),
                 |(mut index_acc, mut char_acc), (index, char)| {
                     index_acc.push(index);
                     char_acc.push(char);
@@ -52,11 +52,13 @@ fn main() {
         .map(|input| find_first_unqiue_window(input, 4))
         .collect();
 
+    let now = std::time::Instant::now();
     let two: Vec<usize> = input
         .iter()
         .map(|input| find_first_unqiue_window(input, 14))
         .collect();
+    let spent = std::time::Instant::now() - now;
 
     println!("one: \n{one:#?}");
-    println!("two: \n{two:#?}");
+    println!("two {spent:?}: \n{two:#?}");
 }
