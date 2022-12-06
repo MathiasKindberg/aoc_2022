@@ -19,6 +19,7 @@ fn find_first_unqiue_window<const WINDOW_SIZE: usize>(input: &str) -> usize {
         let mut chars: arrayvec::ArrayVec<_, WINDOW_SIZE> =
             window.iter().map(|item| item.1).collect();
 
+        // O(n * Log(N)). Likely by far the slowest operation.
         chars.sort();
 
         if window.len() != WINDOW_SIZE {
