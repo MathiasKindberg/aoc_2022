@@ -12,32 +12,27 @@ fn input() -> Vec<String> {
         .collect()
 }
 
-fn find_first_unqiue_window(input: &str, size: usize) -> usize {
+fn find_first_unqiue_window<const WINDOW_SIZE: usize>(input: &str) -> usize {
     let char_indices = input.char_indices().collect::<Vec<(usize, char)>>();
 
-    let result = char_indices
-        .windows(size)
-        .map(|window| {
-            window.iter().fold(
-                (Vec::with_capacity(size), Vec::with_capacity(size)),
-                |(mut index_acc, mut char_acc), (index, char)| {
-                    index_acc.push(index);
-                    char_acc.push(char);
-                    (index_acc, char_acc)
-                },
-            )
-        })
-        .try_for_each(|(indices, mut chars)| {
-            // O(N*Log(N)) but good enough for this size input.
-            chars.sort();
-            chars.dedup();
+    let result = char_indices.windows(WINDOW_SIZE).try_for_each(|window| {
+        let mut chars: arrayvec::ArrayVec<_, WINDOW_SIZE> =
+            window.iter().map(|item| item.1).collect();
 
-            if indices.len() == size && chars.len() == size {
-                // AoC wants 1 based indexing
-                return ControlFlow::Break(*indices.last().unwrap() + 1);
+        chars.sort();
+
+        if window.len() != WINDOW_SIZE {
+            return std::ops::ControlFlow::Continue(());
+        }
+
+        for char in chars.windows(2) {
+            if char[0] == char[1] {
+                return std::ops::ControlFlow::Continue(());
             }
-            std::ops::ControlFlow::Continue(())
-        });
+        }
+
+        std::ops::ControlFlow::Break(window.last().unwrap().0 + 1)
+    });
 
     match result {
         ControlFlow::Break(res) => res,
@@ -50,13 +45,13 @@ fn main() {
 
     let one: Vec<usize> = input
         .iter()
-        .map(|input| find_first_unqiue_window(input, 4))
+        .map(|input| find_first_unqiue_window::<4>(input))
         .collect();
 
     let now = std::time::Instant::now();
     let two: Vec<usize> = input
         .iter()
-        .map(|input| find_first_unqiue_window(input, 14))
+        .map(|input| find_first_unqiue_window::<14>(input))
         .collect();
     let spent = std::time::Instant::now() - now;
 
