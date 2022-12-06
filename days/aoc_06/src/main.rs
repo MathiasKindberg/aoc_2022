@@ -28,6 +28,7 @@ fn find_first_unqiue_window(input: &str, size: usize) -> usize {
             )
         })
         .try_for_each(|(indices, mut chars)| {
+            // O(N*Log(N)) but good enough for this size input.
             chars.sort();
             chars.dedup();
 
