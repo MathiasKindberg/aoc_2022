@@ -75,7 +75,7 @@ fn traverse(
 
 fn sum_size(node: Rc<RefCell<Directory>>, folder_sizes: &mut Vec<usize>) -> usize {
     let mut dir_size = 0;
-    for (_, content) in &node.borrow().content {
+    for content in node.borrow().content.values() {
         let size = match content {
             Content::Directory(dir) => sum_size(dir.clone(), folder_sizes),
             Content::File(file) => *file,
@@ -104,9 +104,6 @@ fn one(input: Vec<String>) -> usize {
 }
 
 fn two(input: Vec<String>) -> usize {
-    const TOTAL_SPACE: usize = 70_000_000;
-    const REQUIRED: usize = 30_000_000;
-
     let root_node = Rc::new(RefCell::new(Directory {
         parent: None,
         content: std::collections::HashMap::new(),
@@ -116,6 +113,9 @@ fn two(input: Vec<String>) -> usize {
 
     let mut folder_sizes: Vec<usize> = Vec::new();
     let total_used = sum_size(root_node, &mut folder_sizes);
+
+    const TOTAL_SPACE: usize = 70_000_000;
+    const REQUIRED: usize = 30_000_000;
 
     let min_to_free = REQUIRED - (TOTAL_SPACE - total_used);
 
