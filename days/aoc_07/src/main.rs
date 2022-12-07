@@ -99,8 +99,8 @@ fn one(input: Vec<String>) -> usize {
     let _size = sum_size(root_node, &mut folder_sizes);
 
     const CUT_OFF: usize = 100_000;
-    folder_sizes.retain(|elem| *elem <= CUT_OFF);
-    folder_sizes.iter().sum()
+
+    folder_sizes.iter().filter(|elem| **elem <= CUT_OFF).sum()
 }
 
 fn two(input: Vec<String>) -> usize {
