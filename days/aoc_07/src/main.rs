@@ -74,14 +74,16 @@ fn traverse(
 }
 
 fn sum_size(node: Rc<RefCell<Directory>>, folder_sizes: &mut Vec<usize>) -> usize {
-    let mut dir_size = 0;
-    for content in node.borrow().content.values() {
-        let size = match content {
+    let dir_size = node
+        .borrow()
+        .content
+        .values()
+        .map(|content| match content {
             Content::Directory(dir) => sum_size(dir.clone(), folder_sizes),
             Content::File(file) => *file,
-        };
-        dir_size += size;
-    }
+        })
+        .sum();
+
     folder_sizes.push(dir_size);
 
     dir_size
