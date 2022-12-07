@@ -46,8 +46,6 @@ fn traverse(
                 None => unreachable!("Trying to cd into something which does not exist"),
             },
         }
-
-        // println!("were going down: {row}")
     } else if action.starts_with("$ ls") {
         node
     } else if action.starts_with("dir") {
@@ -71,6 +69,7 @@ fn traverse(
             .insert(name.to_owned(), Content::File(size));
         node
     };
+
     traverse(input, next_node, root_node)
 }
 
