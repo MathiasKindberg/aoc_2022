@@ -110,9 +110,7 @@ impl Map {
 
         let right = visible(row_data[col + 1..].iter(), height).unwrap();
         let left = visible(row_data[..col].iter().rev(), height).unwrap();
-
         let up = visible(col_data[..row].iter().rev(), height).unwrap();
-
         let down = visible(col_data[row + 1..].iter(), height).unwrap();
 
         right * left * up * down
