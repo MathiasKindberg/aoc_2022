@@ -1,5 +1,32 @@
 use std::io::BufRead;
 
+fn input() -> Vec<Vec<isize>> {
+    let stdin = std::io::stdin();
+    // Pads input with -1 all around.
+
+    let mut input: Vec<Vec<isize>> = stdin
+        .lock()
+        .lines()
+        .into_iter()
+        .filter_map(|line| line.ok())
+        .map(|row| {
+            let mut row = row
+                .chars()
+                .into_iter()
+                .map(|char| char.to_string().parse::<isize>().unwrap())
+                .collect::<Vec<isize>>();
+
+            row.insert(0, -1);
+            row.push(-1);
+            row
+        })
+        .collect();
+    input.insert(0, vec![-1; input[0].len()]);
+    input.push(vec![-1; input[0].len()]);
+
+    input
+}
+
 #[derive(Debug)]
 struct Map {
     row_length: usize,
@@ -72,26 +99,40 @@ impl Map {
     }
 
     fn calculate_scenic_score(&self, row: usize, col: usize) -> usize {
-        // Remove -1 padding which made Part 1 easy...
-        let row_data: Vec<&isize> = self
-            .row(row)
-            .into_iter()
-            .filter(|elem| **elem != -1)
-            .collect();
-        let col_data: Vec<&isize> = self
-            .col(col)
-            .into_iter()
-            .filter(|elem| **elem != -1)
-            .collect();
+        let row_data = self.row(row);
+        let col_data = self.col(col);
 
         let height = row_data[col];
         let height_col = col_data[row];
 
+        assert!(*height >= 0);
         assert_eq!(height, height_col);
 
-        // println!()
-        0
+        let right = visible(row_data[col + 1..].iter(), height).unwrap();
+        let left = visible(row_data[..col].iter().rev(), height).unwrap();
+
+        let up = visible(col_data[..row].iter().rev(), height).unwrap();
+
+        let down = visible(col_data[row + 1..].iter(), height).unwrap();
+
+        right * left * up * down
     }
+}
+
+fn visible<'a, I>(vals: I, height: &isize) -> Option<usize>
+where
+    I: Iterator<Item = &'a &'a isize>,
+{
+    let mut visible = 0;
+    for tree in vals {
+        visible += 1;
+        if *tree >= height {
+            return Some(visible);
+        } else if **tree == -1 {
+            return Some(visible - 1);
+        }
+    }
+    None
 }
 
 fn one(map: &Map) -> usize {
@@ -106,56 +147,30 @@ fn one(map: &Map) -> usize {
     visible
 }
 
-fn input() -> Vec<Vec<isize>> {
-    let stdin = std::io::stdin();
-    // Pads input with -1 all around.
+fn two(map: &Map) -> usize {
+    let mut max_scenic_score = 0;
 
-    let mut input: Vec<Vec<isize>> = stdin
-        .lock()
-        .lines()
-        .into_iter()
-        .filter_map(|line| line.ok())
-        .map(|row| {
-            let mut row = row
-                .chars()
-                .into_iter()
-                .map(|char| char.to_string().parse::<isize>().unwrap())
-                .collect::<Vec<isize>>();
-
-            row.insert(0, -1);
-            row.push(-1);
-            row
-        })
-        .collect();
-    input.insert(0, vec![-1; input[0].len()]);
-    input.push(vec![-1; input[0].len()]);
-
-    input
+    for row in 1..map.row_length - 1 {
+        for col in 1..map.col_length - 1 {
+            max_scenic_score = max_scenic_score.max(map.calculate_scenic_score(row, col));
+        }
+    }
+    max_scenic_score
 }
 
 fn main() {
     let input = input();
-    // for row in &input {
-    //     println!("{row:?}");
-    // }
 
     let map = Map::new(input);
-
-    // for row in 0..map.row_length {
-    //     for col in 0..map.col_length {
-    //         map.is_visible(row, col);
-    //     }
-    // }
-    // map.is_visible(2, 5);
 
     let now = std::time::Instant::now();
     let one = one(&map);
     let one_spent = std::time::Instant::now() - now;
 
-    // let now = std::time::Instant::now();
-    // let two = two(input);
-    // let two_spent = std::time::Instant::now() - now;
+    let now = std::time::Instant::now();
+    let two = two(&map);
+    let two_spent = std::time::Instant::now() - now;
 
     println!("one {one_spent:?} {one:#?}");
-    // println!("two {two_spent:?} {two:#?}");
+    println!("two {two_spent:?} {two:#?}");
 }
