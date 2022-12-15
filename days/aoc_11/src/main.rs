@@ -130,9 +130,8 @@ fn one(mut monkeys: Vec<Monkey>) -> usize {
         .map(|monkey| monkey.inspections)
         .collect();
     inspections.sort();
-    inspections.reverse();
-    println!("inspections: {inspections:?}");
-    inspections[0] * inspections[1]
+
+    inspections.into_iter().rev().take(2).product()
 }
 
 fn two(mut monkeys: Vec<Monkey>) -> usize {
